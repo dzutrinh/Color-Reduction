@@ -1,0 +1,10 @@
+CC=gcc
+CFLAGS=-Wall -O3 -std=c99
+
+all: unipal.exe
+
+unipal.exe: unipal.c image.c bitmap.c
+	$(CC) $(CFLAGS) unipal.c image.c bitmap.c -o $@
+
+clean:
+	del unipal.exe
