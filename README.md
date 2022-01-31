@@ -21,3 +21,5 @@ Whereas:
 
 Output image will be stored as a 8-bit Windows bitmap.
 
+### Preview
+![https://github.com/dzutrinh/Uniform-Palette/blob/main/compares.png?raw=true](https://github.com/dzutrinh/Uniform-Palette/blob/main/compares.png?raw=true)
