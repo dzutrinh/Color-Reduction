@@ -8,6 +8,16 @@ Reduce color information (quantization) of a 24-bit RGB bitmap down to 8-bit pal
 make
 ```
 
+or 
+
+```
+makedos.bat	
+```
+
+for MS-DOS target.
+
+No external dependencies required. It was tested on **macOS Monterey** (clang) and **MS-DOS** (DJGPP).
+
 ### Usage
 
 ```
