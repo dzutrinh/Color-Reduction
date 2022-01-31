@@ -11,10 +11,8 @@ make
 or 
 
 ```
-makedos.bat	
+makedos.bat		# MS-DOS target
 ```
-
-for MS-DOS target.
 
 No external dependencies required. It was tested on **macOS Monterey** (clang) and **MS-DOS** (DJGPP).
 
@@ -26,10 +24,13 @@ No external dependencies required. It was tested on **macOS Monterey** (clang) a
 
 Whereas:
 
-* input.bmp: image to be quantized, must be 24-bit Windows bitmap.
-* dither: enable dithering using ordered matrix
+* `input.bmp`: image to be quantized, must be a 24-bit Windows bitmap.
+* `dither`: enable dithering using 4x4 ordered matrix
 
-Output image will be stored as a 8-bit Windows bitmap.
+Output image will be stored as a 8-bit Windows bitmap under the name `output.bmp`.
 
 ### Preview
+
+**Left**: Original; **Middle**: 8-bit undithered; **Right** 8-bit dithered.
+
 ![https://github.com/dzutrinh/Uniform-Palette/blob/main/compares.png?raw=true](https://github.com/dzutrinh/Uniform-Palette/blob/main/compares.png?raw=true)
