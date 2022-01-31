@@ -1,4 +1,4 @@
-## Uniform Palette
+## Color Reduction
 
 Reduce color information (quantization) of a 24-bit RGB bitmap down to 8-bit palette-based bitmap.
 
