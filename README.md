@@ -33,4 +33,4 @@ Output image will be stored as a 8-bit Windows bitmap under the name `output.bmp
 
 **Left**: Original; **Middle**: 8-bit undithered; **Right** 8-bit dithered.
 
-![https://github.com/dzutrinh/Uniform-Palette/blob/main/compares.png?raw=true](https://github.com/dzutrinh/Uniform-Palette/blob/main/compares.png?raw=true)
+![./compares.png?raw=true)
