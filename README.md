@@ -11,10 +11,16 @@ make
 or 
 
 ```
+mingw32-make	# for MinGW32/64 users
+```
+
+or 
+
+```
 makedos.bat		# MS-DOS target
 ```
 
-No external dependencies required. It was tested on **macOS Monterey** (clang) and **MS-DOS** (DJGPP).
+No external dependencies required. It was tested on **macOS Monterey** (clang) **Windows 10** (LLVM MinGW64) and **MS-DOS** (DJGPP).
 
 ### Usage
 

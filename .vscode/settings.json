@@ -4,6 +4,12 @@
             "cwd": "/Users/dzutrinh/Developer/Color-Reduction",
             "binaryPath": "/Users/dzutrinh/Developer/Color-Reduction/unipal",
             "binaryArgs": []
+        },
+        {
+            "cwd": "d:\\Developer\\Color-Reduction",
+            "binaryPath": "d:\\Developer\\Color-Reduction\\unipal",
+            "binaryArgs": []
         }
-    ]
+    ],
+    "makefile.makePath": "mingw32-make"
 }
