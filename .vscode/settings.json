@@ -1,0 +1,9 @@
+{
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/Users/dzutrinh/Developer/Color-Reduction",
+            "binaryPath": "/Users/dzutrinh/Developer/Color-Reduction/unipal",
+            "binaryArgs": []
+        }
+    ]
+}

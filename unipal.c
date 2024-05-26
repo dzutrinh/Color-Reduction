@@ -17,15 +17,13 @@ uint8 bayerMatrix[16] = { 0,  8,  2, 10,
                          15,  7, 13,  5};
 
 /* slightly fast color clamping */
-inline uint8 clamp(int n)
-{
+inline uint8 clamp(int n) {
     n &= -(n >= 0);
     return n | ((255 - n) >> 31);
 }
 
 /* fast RGB quantization */
-bitmap quantize_uniform(const bitmap bmp, bool dither)
-{
+bitmap quantize_uniform(const bitmap bmp, bool dither) {
     if (!bmp) return NULL;
     if (bmp->format != BMF_RGB24) return NULL;
 
@@ -37,10 +35,8 @@ bitmap quantize_uniform(const bitmap bmp, bool dither)
     uint8 * dst = res->data;    /* pointer to output bitmap bits */    
     
     /* quantization phase */
-    for (int y = 0; y < bmp->height; y++)
-    {
-        for (int x = 0; x < bmp->width; x++)
-        {
+    for (int y = 0; y < bmp->height; y++) {
+        for (int x = 0; x < bmp->width; x++) {
             /* dithering if needed */
             int t = dither ? bayerMatrix[((y & 3) << 2) + (x & 3)] : 0;
             int b = clamp((*src++) + (t << 1));
@@ -61,14 +57,12 @@ bitmap quantize_uniform(const bitmap bmp, bool dither)
 
     /* generate a uniform CLUT based on the quantized colors */
     for (int i = 0; i < 256; i++)
-        if (uniCubes[i].count)
-        {
+        if (uniCubes[i].count) {
             res->pal[i].r = (uniCubes[i].r / uniCubes[i].count);
             res->pal[i].g = (uniCubes[i].g / uniCubes[i].count);
             res->pal[i].b = (uniCubes[i].b / uniCubes[i].count);
         }
-        else
-        {
+        else {
             res->pal[i].r = 0;
             res->pal[i].g = 0;
             res->pal[i].b = 0;
@@ -78,25 +72,20 @@ bitmap quantize_uniform(const bitmap bmp, bool dither)
 }
 
 /* main program */
-int main(int argc, char ** argv)
-{
+int main(int argc, char ** argv) {
     bitmap  bmp;
     bool    dither = false;
 
-    if (argc < 2)
-    {
+    if (argc < 2) {
         printf("Usage: unipal image.bmp [dither]\n");
         return -1;
     }
 
     if (argc > 2)
-    {
         dither = !strcmp(argv[2], "dither");
-    }
 
     printf(". Loading bitmap \"%s\"...\n", argv[1]);
-    if (!(bmp = bmp_load(argv[1])))
-    {
+    if (!(bmp = bmp_load(argv[1]))) {
         printf("ERROR: cannot load \"%s\"\n", argv[1]);
         return -1;
     }
@@ -104,8 +93,7 @@ int main(int argc, char ** argv)
     printf(". Quantizing colors (dither=%s)...\n", dither ? "yes" : "no");
     bitmap res = quantize_uniform(bmp, dither);
 
-    if (res)
-    {
+    if (res) {
         printf(". Saving output to \"output.bmp\"...\n");
         bmp_save("output.bmp", &res);
         bitmap_destroy(&res);

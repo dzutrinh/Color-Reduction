@@ -5,8 +5,7 @@
 /*  bitmap_create()
 *   creates a bitmap on memory and return its handle
 */
-bitmap bitmap_create(uint32 width, uint32 height, bitmap_format_t format, bool hasPal)
-{
+bitmap bitmap_create(uint32 width, uint32 height, bitmap_format_t format, bool hasPal) {
     bitmap  bmp = (bitmap) malloc(sizeof(bitmap_t));    /* allocates bitmap handle */
     uint32  linew = width;
 
@@ -17,24 +16,19 @@ bitmap bitmap_create(uint32 width, uint32 height, bitmap_format_t format, bool h
     bmp->height = height;   /* update the bitmap's height in pixels */
 
     /* allocates the color palette if requested */
-    if (hasPal)
-    {
+    if (hasPal) {
         bmp->pal = (rgb_t *) malloc(768);
-        if (!bmp->pal)      /* not enough memory? */
-        {
+        if (!bmp->pal) {    /* not enough memory? */
             free(bmp);      /* releases the bitmap handle */
             return NULL;    /* and returns nothing */
         }
     }
     else
-    {
         bmp->pal = NULL;    /* no color palette requested */
-    }
 
     /* calculates the correct bitmap storage size and the width of each
        scanline */
-    switch (format)
-    {
+    switch (format) {
     case BMF_BINARY:    linew = (linew+7)/8; break;
     case BMF_INDEXED2:  linew = (linew+3)/4; break;
     case BMF_INDEXED4:  linew = (linew+1)/2; break;
@@ -47,13 +41,10 @@ bitmap bitmap_create(uint32 width, uint32 height, bitmap_format_t format, bool h
 
     /* allocates the bitmap bits */
     bmp->data = (uint8 *) malloc(bmp->size);
-    if (!bmp)           /* not enough memory */
-    {
+    if (!bmp) {          /* not enough memory */
         /* releases the color palette if present */
         if (bmp->pal)
-        {
             free(bmp->pal);
-        }
         /* and returns nothing */
         return NULL;
     }
@@ -65,21 +56,17 @@ bitmap bitmap_create(uint32 width, uint32 height, bitmap_format_t format, bool h
 /*  bitmap_destroy()
 *   destroys a bitmap and releases all it occuppied memory
 */
-void bitmap_destroy(bitmap * bmp)
-{
+void bitmap_destroy(bitmap * bmp) {
     /* a valid bitmap provided? */
-    if ((*bmp))
-    {
+    if ((*bmp)) {
         /* releases the color palette if present */
-        if ((*bmp)->pal)
-        {
+        if ((*bmp)->pal) {
             free((*bmp)->pal);
             (*bmp)->pal = NULL;
         }
 
         /* releases the bitmap bits if present */
-        if ((*bmp)->data)
-        {
+        if ((*bmp)->data) {
             free((*bmp)->data);
             (*bmp)->data = NULL;
         }
@@ -89,12 +76,10 @@ void bitmap_destroy(bitmap * bmp)
     }
 }
 
-uint32 bitmap_row_size(const bitmap * bmp)
-{
+uint32 bitmap_row_size(const bitmap * bmp) {
     return (*bmp)->rowsize;
 }
 
-bool bitmap_has_pal(const bitmap * bmp)
-{
+bool bitmap_has_pal(const bitmap * bmp) {
     return ((*bmp)->pal != NULL);
 }

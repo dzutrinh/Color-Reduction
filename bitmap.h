@@ -7,8 +7,7 @@ extern "C" {
 
 #include "image.h"
 
-typedef	struct	_BMP_CONTEXT
-{
+typedef	struct bmp_context {
 	BMP_HEADER		hdr;
 	BMP_INFO_HEADER	info;
 	BMP_BITFIELDS	fields;
