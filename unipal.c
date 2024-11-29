@@ -1,5 +1,5 @@
 /* UNIPAL.C: reduce an RGB 24-bit image to 8-bit using uniform palette */
-/* Coded by Trinh D.D. Nguyen, Jan 2022 */
+/* Coded by Trinh D.D. Nguyen, Dec 2024 */
 
 #include <stdio.h>
 #include <string.h>
@@ -11,6 +11,7 @@ typedef struct cube_t {
     uint32  count;
 } cube, cubes[256];
 
+/* for ordered dithering */
 uint8 bayerMatrix[16] = { 0,  8,  2, 10, 
                          12,  4, 14,  6,
                           3, 11,  1,  9,
@@ -72,34 +73,51 @@ bitmap quantize_uniform(const bitmap bmp, bool dither) {
 }
 
 /* main program */
-int main(int argc, char ** argv) {
+int main(int argc, char * argv[]) {
     bitmap  bmp;
     bool    dither = false;
+    char    input[256] = {0}, output[256] = "output.bmp";
 
     if (argc < 2) {
-        printf("Usage: unipal image.bmp [dither]\n");
+        printf("Usage: unipal image.bmp [output.bmp] [-d[ither]]\n");
         return -1;
     }
 
-    if (argc > 2)
-        dither = !strcmp(argv[2], "dither");
-
-    printf(". Loading bitmap \"%s\"...\n", argv[1]);
-    if (!(bmp = bmp_load(argv[1]))) {
-        printf("ERROR: cannot load \"%s\"\n", argv[1]);
-        return -1;
+    if (argc >= 2) {
+        strncpy(input, argv[1], 255);
+        if (argc == 3) {
+            dither = !strcmp(argv[2], "-dither") || !strcmp(argv[2], "-d") ;
+            if (!dither)
+                strncpy(output, argv[2], 255);
+        }
+        else 
+        if (argc > 3) {
+            strncpy(output, argv[2], 255);
+            dither = !strcmp(argv[3], "-dither") || !strcmp(argv[3], "-d") ;
+        }
     }
 
-    printf(". Quantizing colors (dither=%s)...\n", dither ? "yes" : "no");
+    printf(". Input  = [%s]\n", input);
+    printf(". Output = [%s]\n", output);
+
+    printf(". Loading bitmap [%s]...\n", input);
+    if (!(bmp = bmp_load(input))) {
+        printf("ERROR: cannot load [%s]\n", input);
+        return -1;
+    }
+    printf("  - Image dimensions = %d x %d\n", bmp->width, bmp->height);
+
+    printf(". Quantizing colors (dithering: %s)...\n", dither ? "yes" : "no");
     bitmap res = quantize_uniform(bmp, dither);
 
     if (res) {
-        printf(". Saving output to \"output.bmp\"...\n");
-        bmp_save("output.bmp", &res);
+        printf(". Saving output to [%s]...\n", output);
+        if (!bmp_save(output, &res))
+            printf("ERROR: cannot write output bitmap.\n");
         bitmap_destroy(&res);
     }
     else
-        printf("ERROR: bitmap must be 24-bit.\n");
+        printf("ERROR: input bitmap must be 24-bit.\n");
 
     bitmap_destroy(&bmp);
     return 0;

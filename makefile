@@ -15,7 +15,7 @@ else
 	CFLAGS=
 endif
 CC=gcc
-CFLAGS+=-Wall -O3 -std=c99
+CFLAGS+=-Wall -O2 -std=c99
 SRC=unipal.c image.c bitmap.c
 
 all: $(UNIPAL)
