@@ -25,15 +25,16 @@ No external dependencies required. It was tested on **macOS Monterey** (clang) *
 ### Usage
 
 ```
-./unipal input.bmp [dither]
+./unipal input.bmp [output.bmp] [-d[ither]]
 ```
 
 Whereas:
 
 * `input.bmp`: image to be quantized, must be a 24-bit Windows bitmap.
-* `dither`: enable dithering using 4x4 ordered matrix
+* `output.bmp`: name of the file to store the output image.
+* `-d`, `-dither`: enable dithering using 4x4 ordered matrix
 
-Output image will be stored as a 8-bit Windows bitmap under the name `output.bmp`.
+If not specified, the output image will be stored as a 8-bit Windows bitmap under the default name `output.bmp`.
 
 ### Preview
 
