@@ -11,5 +11,8 @@
             "binaryArgs": []
         }
     ],
-    "makefile.makePath": "make"
+    "makefile.makePath": "make",
+    "files.associations": {
+        "image.h": "c"
+    }
 }

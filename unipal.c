@@ -1,8 +1,13 @@
 /* UNIPAL.C: reduce an RGB 24-bit image to 8-bit using uniform palette */
 /* Coded by Trinh D.D. Nguyen, Dec 2024 */
 
+// #define USE_GAMMA_CORRECTION
+
 #include <stdio.h>
 #include <string.h>
+#ifdef USE_GAMMA_CORRECTION
+    #include <math.h>
+#endif
 #include "image.h"
 #include "bitmap.h"
 
@@ -23,6 +28,27 @@ inline uint8 clamp(int n) {
     return n | ((255 - n) >> 31);
 }
 
+#ifdef USE_GAMMA_CORRECTION
+
+float   gamma_value = 2.2;
+
+/* gamma correction for an RGB triplet */
+void gamma_correction(int *r, int *g, int *b, float gamma) { 
+    float rNorm = *r / 255.0; 
+    float gNorm = *g / 255.0; 
+    float bNorm = *b / 255.0; 
+    
+    // perform corrections
+    rNorm = pow(rNorm, gamma); 
+    gNorm = pow(gNorm, gamma); 
+    bNorm = pow(bNorm, gamma); 
+    
+    *r = (int)(rNorm * 255.0); 
+    *g = (int)(gNorm * 255.0); 
+    *b = (int)(bNorm * 255.0); 
+}
+#endif
+
 /* fast RGB quantization */
 bitmap quantize_uniform(const bitmap bmp, bool dither) {
     if (!bmp) return NULL;
@@ -39,11 +65,13 @@ bitmap quantize_uniform(const bitmap bmp, bool dither) {
     for (int y = 0; y < bmp->height; y++) {
         for (int x = 0; x < bmp->width; x++) {
             /* dithering if needed */
-            int t = dither ? bayerMatrix[((y & 3) << 2) + (x & 3)] : 0;
+            int t = dither ? (bayerMatrix[((y & 3) << 2) + (x & 3)] - 8) : 0;
             int b = clamp((*src++) + (t << 1));
             int g = clamp((*src++) + (t << 1));
             int r = clamp((*src++) + (t << 1));
-
+#ifdef USE_GAMMA_CORRECTION
+            gamma_correction(&r, &g, &b, gamma_value);
+#endif
             /* quantize */
             uint8 k = ((r >> 5) << 5) + ((g >> 5) << 2) + (b >> 6);
 		    (*dst++) = k;
