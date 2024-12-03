@@ -11,5 +11,5 @@
             "binaryArgs": []
         }
     ],
-    "makefile.makePath": "mingw32-make"
+    "makefile.makePath": "make"
 }
