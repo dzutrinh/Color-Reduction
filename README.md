@@ -32,7 +32,7 @@ Whereas:
 
 * `input.bmp`: image to be quantized, must be a 24-bit Windows bitmap.
 * `output.bmp`: name of the file to store the output image.
-* `-d`, `-dither`: enable dithering using 4x4 ordered matrix
+* `-d[N]`, `-dither[N]`: enable dithering using 4x4 ordered matrix with strength N (1-9)
 
 If not specified, the output image will be stored as a 8-bit Windows bitmap under the default name `output.bmp`.
 

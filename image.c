@@ -41,10 +41,12 @@ bitmap bitmap_create(uint32 width, uint32 height, bitmap_format_t format, bool h
 
     /* allocates the bitmap bits */
     bmp->data = (uint8 *) malloc(bmp->size);
-    if (!bmp) {          /* not enough memory */
+    if (!bmp->data) {    /* not enough memory */
         /* releases the color palette if present */
         if (bmp->pal)
             free(bmp->pal);
+        /* releases the bitmap handle */
+        free(bmp);
         /* and returns nothing */
         return NULL;
     }
