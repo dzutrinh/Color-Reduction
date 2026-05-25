@@ -494,9 +494,10 @@ bool bmp_setup_header(BMP_CONTEXT ** ctx, const bitmap * bmp) {
 			return false;
 
 		for (int i = 0; i < (1 << (*ctx)->info.bitcount); i++) {
-			(*ctx)->palette[i].r = (*bmp)->pal[i].r;
-			(*ctx)->palette[i].g = (*bmp)->pal[i].g;
-			(*ctx)->palette[i].b = (*bmp)->pal[i].b;
+			/* BMP palette format is BGRA, but rgba_t is RGBA, so swap B and R */
+			(*ctx)->palette[i].r = (*bmp)->pal[i].b;  /* B goes to R position */
+			(*ctx)->palette[i].g = (*bmp)->pal[i].g;  /* G stays in G position */
+			(*ctx)->palette[i].b = (*bmp)->pal[i].r;  /* R goes to B position */
 			(*ctx)->palette[i].a = 0;
 		}
 	}

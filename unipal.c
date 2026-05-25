@@ -5,25 +5,14 @@
 #include <string.h>
 #include "image.h"
 #include "bitmap.h"
+#include "dithering.h"
 
 typedef struct cube_t {
     uint32  r, g, b;
     uint32  count;
 } cube, cubes[256];
 
-/* for ordered dithering */
-uint8 bayerMatrix[16] = { 0,  8,  2, 10, 
-                         12,  4, 14,  6,
-                          3, 11,  1,  9,
-                         15,  7, 13,  5};
-
-/* slightly fast color clamping */
-static inline uint8 clamp(int n) {
-    n &= -(n >= 0);
-    return n | ((255 - n) >> 31);
-}
-
-/* fast RGB quantization */
+/* fast RGB quantization using uniform palette */
 bitmap quantize_uniform(const bitmap bmp, int ditherStrength) {
     if (!bmp) return NULL;
     if (bmp->format != BMF_RGB24) return NULL;
@@ -35,16 +24,16 @@ bitmap quantize_uniform(const bitmap bmp, int ditherStrength) {
     uint8 * src = bmp->data;    /* pointer to source bitmap bits */
     uint8 * dst = res->data;    /* pointer to output bitmap bits */    
     
-    /* quantization phase */
+    /* First pass: quantize and accumulate colors for palette generation */
     if (ditherStrength) {
         /* Dithered quantization */
         for (int y = 0; y < bmp->height; y++) {
             int yIndex = (y & 3) << 2;  /* precompute row offset in Bayer matrix */
             for (int x = 0; x < bmp->width; x++) {
                 int t = (bayerMatrix[yIndex + (x & 3)] - 8) * ditherStrength;
-                int b = clamp((*src++) + t);
-                int g = clamp((*src++) + t);
                 int r = clamp((*src++) + t);
+                int g = clamp((*src++) + t);
+                int b = clamp((*src++) + t);
                 /* quantize */
                 uint8 k = ((r >> 5) << 5) + ((g >> 5) << 2) + (b >> 6);
                 (*dst++) = k;
@@ -60,9 +49,9 @@ bitmap quantize_uniform(const bitmap bmp, int ditherStrength) {
         /* Non-dithered quantization (faster path) */
         uint32 totalPixels = bmp->width * bmp->height;
         for (uint32 i = 0; i < totalPixels; i++) {
-            int b = *src++;
-            int g = *src++;
             int r = *src++;
+            int g = *src++;
+            int b = *src++;
             /* quantize */
             uint8 k = ((r >> 5) << 5) + ((g >> 5) << 2) + (b >> 6);
             (*dst++) = k;
@@ -82,7 +71,7 @@ bitmap quantize_uniform(const bitmap bmp, int ditherStrength) {
             res->pal[i].g = (uniCubes[i].g / uniCubes[i].count);
             res->pal[i].b = (uniCubes[i].b / uniCubes[i].count);
         }
-
+    
     return res;
 }
 
