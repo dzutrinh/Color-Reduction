@@ -53,3 +53,5 @@ dkms.conf
 .DS_Store
 unipal
 .vscode/settings.json
+colormatch
+octree
